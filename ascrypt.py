@@ -97,3 +97,4 @@ class AScrypt:
 
         key = ''.join([choice(all) for __ in range(len)])
         return key
+        
