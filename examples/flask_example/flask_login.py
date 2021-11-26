@@ -5,6 +5,8 @@ from ascrypt import AScrypt
 from ascrypt import exceptions as asce
 
 app = Flask(__name__, template_folder=os.getcwd())
+api = Api(app)
+
 ascrypt_key = AScrypt.generate_key(len=64)
 
 class Home(Resource):
@@ -20,11 +22,11 @@ class Home(Resource):
 		except (asce.InvalidTypeToken, asce.InvalidToken) as err:
 			# token inválido
 			print(err)
-			response = {'status': 'error', 'message': 'Faça login para proseguir'}, 401
+			response = {'status': 'error', 'message': 'Faça login para proseguir'}
 		else:
 			response = content
 
-			return response
+		return response
 
 class Auth(Resource):
 	def post():
@@ -33,3 +35,7 @@ class Auth(Resource):
 
 		token = AScrypt(ascrypt_key).new_token(info_user)
 		return {'status': 'sucess', 'token': token}
+
+
+api.add_resource(Auth, '/login')
+api.add_resource(Home, '/')
